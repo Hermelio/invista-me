@@ -1,0 +1,35 @@
+{% extends 'investimentos/base.html'%}
+{% block conteudo %}
+<h1 style="text-align: center;">
+    Detalhe do Investimento
+</h1>
+<div class="container">
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th style="text-align: center;">Id</th>
+            <th style="text-align: center;">Investimentos</th>
+            <th style="text-align: center;">Valor</th>
+            <th style="text-align: center;">Data</th>
+            <th style="text-align: center;">Pago</th>
+        </tr>
+        <tr>
+            <td style="text-align: center;">
+                {{dados.id}}
+            </td>
+            <td style="text-align: center;">
+                {{dados.investimento}}
+            </td>
+            <td style="text-align: center;">
+                {{dados.valor}}
+            </td>
+            <td style="text-align: center;">
+                {{dados.data}}
+            </td>
+            <td style="text-align: center;">
+                {{dados.pago}}
+            </td>
+        </tr>
+    </table>
+</div>
+
+{% endblock %}
