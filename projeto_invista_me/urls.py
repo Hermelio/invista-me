@@ -24,10 +24,10 @@ urlpatterns = [
     path('novo_investimento/', views.criar, name='novo_investimento_comum'),
     path('novo_investimento/<int:id>', views.editar, name='editar'),
     path('excluir_investimento/<int:id>', views.excluir, name='excluir'),
+    path('menu/', views.pagina,
+         name='pagina'),
     path('', views.menu,
          name='menu'),
-    path('pagina/', views.pagina,
-         name='pagina'),
     path('<int:id>', views.detalhe,
          name='detalhe'),
 ]
