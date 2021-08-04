@@ -14,11 +14,10 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'pagina' %}">Invista-Me!</a>
-        </div>
-    </nav>
+    {% block conteudo_menu %}
+
+    {% endblock %}
+
     {% block conteudo %}
 
     {% endblock %}

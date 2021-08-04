@@ -10,6 +10,13 @@ def pagina(request):
     return render(request, 'investimentos/pagina.html', context=dados)
 
 
+def menu(request):
+    dados = {
+        'dados': Investimento.objects.all()
+    }
+    return render(request, 'investimentos/menu.html', context=dados)
+
+
 def detalhe(request, id):
     dados = {
         'dados': Investimento.objects.get(pk=id)
@@ -28,14 +35,14 @@ def criar(request):
         formulario = {
             'formulario': investimento_form
         }
-        return render(request, 'investimentos/novo_investimentos.html', context=formulario)
+        return render(request, 'investimentos/novo_investimento_comum.html', context=formulario)
 
 
 def editar(request, id):
     item = Investimento.objects.get(pk=id)
     if request.method == 'GET':
         formulario = InvestimentoFrom(instance=item)
-        return render(request, 'investimentos/novo_investimentos.html', {'formulario': formulario})
+        return render(request, 'investimentos/novo_investimento_comum.html', {'formulario': formulario})
     else:
         formulario = InvestimentoFrom(request.POST, instance=item)
         if formulario.is_valid():

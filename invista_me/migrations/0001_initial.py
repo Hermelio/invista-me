@@ -20,6 +20,9 @@ class Migration(migrations.Migration):
                 ('valor', models.FloatField()),
                 ('pago', models.BooleanField(default=False)),
                 ('data', models.DateField(default=datetime.datetime(2021, 8, 2, 12, 48, 33, 22084))),
+		('autor_musica', models.TextField(max_length=144)),
+		('autor_livro', models.TextField(max_length=144)),
+		('ano_livro', models.DateField(default=datetime.datetime(2021, 8, 2, 12, 48 , 33, 22084))),
             ],
         ),
     ]
