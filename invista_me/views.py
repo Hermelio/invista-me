@@ -1,8 +1,13 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .models import Investimento
 from .forms import InvestimentoFrom
+from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
+@login_required(login_url='/login/')
 def pagina(request):
     dados = {
         'dados': Investimento.objects.all()
@@ -10,6 +15,7 @@ def pagina(request):
     return render(request, 'investimentos/pagina.html', context=dados)
 
 
+@login_required(login_url='/login/')
 def menu(request):
     dados = {
         'dados': Investimento.objects.all()
@@ -56,6 +62,33 @@ def excluir(request, id):
         item.delete()
         return redirect('pagina')
     return render(request, 'investimentos/confirmar_exclusao.html', {'item': item})
+
+
+def login_user(request):
+    return render(request, 'login.html')
+
+
+def logout_user(request):
+    logout(request)
+    return redirect("login")
+
+
+@csrf_protect
+def submit_login(request):
+    if request.POST:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        print(username)
+        print(password)
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("menu")
+        else:
+            messages.error(
+                request, "Usuario e senha Invalido. Tente novamente")
+    return redirect("login")
+
 
 # def investimento_registrado(request):
 #     investimento = {
