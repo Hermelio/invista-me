@@ -4,7 +4,7 @@
     Listagem de Investimentos
 </h1>
 
-
+<a class='btn btn-success btn-sm'href="{% url 'invista:teste'%}">Teste</a>
 <div class="container">
     <button class="btn btn-success"><a style="color: white;text-decoration: none; "
             href="{% url 'novo_investimento_comum' %}">Novo
@@ -37,7 +37,7 @@
         <tr>
             <th style="text-align: center;">Total</th>
             <td></td>
-            <td style="text-align: center;">{{total}}</td>
+            <td style="text-align: center;">{{total.valor__sum | floatformat:2}}</td>
 
         </tr>
 

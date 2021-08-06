@@ -11,12 +11,17 @@ from django.db.models import Sum
 
 
 @login_required(login_url='/login/')
-def pagina(request):
-    dados = {
-        'dados': Investimento.objects.all()
+def pagina(request):   
+    
+    dados = Investimento.objects.filter(usuario=request.user)
+    total_pago = dados.filter(pago=True).aggregate(Sum('valor'))
+    total_geral = dados.aggregate(Sum('valor'))    
+    contexto = {
+        'dados': dados,
+        'total' : total_geral,
     }
 
-    return render(request, 'investimentos/pagina.html', context=dados)
+    return render(request, 'investimentos/pagina.html', contexto)
 
 
 @login_required(login_url='/login/')
@@ -29,37 +34,41 @@ def menu(request):
 
 def some_view(request):
     dados = Investimento.objects.all()
-    # dados = Investimento.objects.all()
+    total_geral = dados.agregate(Sum(dados.valor))
     total = sum([dado.valor for dado in dados])
-    # total = Investimento.objects.all().annotate(Sum('valor'))
-    # valor_total = Investimento.objects.agregate(Sum('valor'))
-    # total = Sum([valor for valor in dados])
-    # total = sum([dado.valor for dado in dados])
+    print(total_geral)
     print(f"passou {dados}")
     print(f"total {total}")
-
-    return render(request, 'investimentos/pagina.html', {'total': total})
+    contexto = {'dados': dados}     
+    return render(request, 'investimentos/pagina.html', contexto)
 
 
 def detalhe(request, id):
+
+    dados = Investimento.objects.get(pk=id)
+    if dados.usuario != request.user:
+        return redirect ('novo_investimento_comum')
     dados = {
-        'dados': Investimento.objects.get(pk=id)
+        'dados': dados
     }
+    
     return render(request, 'investimentos/detalhe.html', dados)
 
 
 def criar(request):
+    
     if request.method == 'POST':
         investimento_form = InvestimentoFrom(request.POST)
         if investimento_form.is_valid():
-            investimento_form.save()  # salvando no banco de dados
+            user = investimento_form.save(commit=False)  # salvando no banco de dados
+            user.usuario = request.user
+            user.save()
         return redirect("pagina")  # redirecionando para pagina inicial
     else:
-        investimento_form = InvestimentoFrom()
-        formulario = {
-            'formulario': investimento_form
-        }
-        return render(request, 'investimentos/novo_investimento_comum.html', context=formulario)
+        print('Erro ao salvar dados')
+
+    contexto = {'formulario': InvestimentoFrom()}
+    return render(request, 'investimentos/novo_investimento_comum.html', contexto)
 
 
 def editar(request, id):
@@ -113,3 +122,9 @@ def submit_login(request):
 #         'tipo_investimento': request.POST.get('TipoInvestimento')
 #     }
 #     return render(request, 'investimentos/investimento_registrado.html', investimento)
+
+
+
+def teste01(request):
+    template_name='investimentos/teste.html'
+    return render(request, template_name)
