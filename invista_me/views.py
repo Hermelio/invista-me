@@ -1,3 +1,4 @@
+from django.http import request, response
 from django.shortcuts import render, redirect, HttpResponse
 from .models import Investimento
 from .forms import InvestimentoFrom
@@ -5,6 +6,8 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
+from django.db.models import Sum
 
 
 @login_required(login_url='/login/')
@@ -12,6 +15,7 @@ def pagina(request):
     dados = {
         'dados': Investimento.objects.all()
     }
+
     return render(request, 'investimentos/pagina.html', context=dados)
 
 
@@ -21,6 +25,20 @@ def menu(request):
         'dados': Investimento.objects.all()
     }
     return render(request, 'investimentos/menu.html', context=dados)
+
+
+def some_view(request):
+    dados = Investimento.objects.all()
+    # dados = Investimento.objects.all()
+    total = sum([dado.valor for dado in dados])
+    # total = Investimento.objects.all().annotate(Sum('valor'))
+    # valor_total = Investimento.objects.agregate(Sum('valor'))
+    # total = Sum([valor for valor in dados])
+    # total = sum([dado.valor for dado in dados])
+    print(f"passou {dados}")
+    print(f"total {total}")
+
+    return render(request, 'investimentos/pagina.html', {'total': total})
 
 
 def detalhe(request, id):

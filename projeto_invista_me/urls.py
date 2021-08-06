@@ -10,7 +10,7 @@ urlpatterns = [
     path('novo_investimento/', views.criar, name='novo_investimento_comum'),
     path('novo_investimento/<int:id>', views.editar, name='editar'),
     path('excluir_investimento/<int:id>', views.excluir, name='excluir'),
-    path('menu/', views.pagina,
+    path('pagina/', views.pagina,
          name='pagina'),
     path('', views.menu,
          name='menu'),
@@ -19,4 +19,5 @@ urlpatterns = [
     path('login/', views.login_user, name='login'),
     path('logout/', views.logout_user, name='logout'),
     path('login/submit', views.submit_login),
+    path('teste/', views.some_view)
 ]

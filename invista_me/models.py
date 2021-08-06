@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from django.core.serializers.json import DjangoJSONEncoder
 
 
 class Investimento(models.Model):  # tenho que usar o model para usar o banco de dados
@@ -8,6 +9,7 @@ class Investimento(models.Model):  # tenho que usar o model para usar o banco de
     pago = models.BooleanField(default=False)
     data = models.DateField(default=datetime.now())
     perdido = models.BooleanField(default=False)
+
     # autor_livro = models.TextField(max_length=255)
     # ano_do_livro = models.DateField(default=datetime.now())
 # class Usuario(models.Model):
@@ -35,4 +37,3 @@ class Investimento(models.Model):  # tenho que usar o model para usar o banco de
 #     null=False,
 #     blank=False
 #   )
-

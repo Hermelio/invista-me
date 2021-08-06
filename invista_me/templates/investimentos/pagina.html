@@ -14,7 +14,7 @@
             <th style="text-align: center;">Id</th>
             <th style="text-align: center;">Investimento</th>
             <th style="text-align: center;">Valor</th>
-            <th></th>
+            <th style="text-align: center;"></th>
             <th></th>
             <th></th>
         </tr>
@@ -23,7 +23,6 @@
             <td style="text-align: center;">{{dado.id}}</td>
             <td style="text-align: center;">{{dado.investimento}}</td>
             <td style="text-align: center;">{{dado.valor}}</td>
-
             <td style="text-align: center;"><button class="btn btn-info"> <a style="color: white;text-decoration: none;"
                         href="{% url 'detalhe' dado.id %}">Detalhe</a></button></td>
             <td style="text-align: center;"><button class="btn btn-warning "> <a
@@ -34,6 +33,15 @@
                         href="{% url 'excluir' dado.id %}">Excluir</a></button></td>
         </tr>
         {% endfor %}
+
+        <tr>
+            <th style="text-align: center;">Total</th>
+            <td></td>
+            <td style="text-align: center;">{{total}}</td>
+
+        </tr>
+
+
     </table>
 </div>
 {% endblock %}
