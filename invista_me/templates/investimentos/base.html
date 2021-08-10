@@ -41,18 +41,25 @@
                         <a class="nav-link" href="#">Fale Conosco</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <!--<ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <button class="btn btn-danger">
-                            <a class="nav-link" style="width: 10%; height: 10%;" href="{% url 'logout' %}">Logout</a>
+                            <a class="nav-link" style="width: 10%; height: 10%;" href="{% url 'logout' %}">Sair</a>
                         </button>
 
                     </li>
-                </ul>
-                <form class="d-flex">
+                </ul>-->
+                <!--<form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+                </form>-->
+            
+            {% if user.is_authenticated %}
+             <span class="navbar-text">
+              olá <b>{{user.username}}</b>
+            </span>
+            <a class="nav-link" style="width: 10%; height: 10%;" href="{% url 'logout' %}">Sair</a>
+            {% endif %}
             </div>
         </nav>
     </div>
