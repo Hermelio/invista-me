@@ -11,17 +11,26 @@ from django.db.models import Sum
 
 
 @login_required(login_url='/login/')
-def pagina(request):   
-    
+def pagina(request):
+
     dados = Investimento.objects.filter(usuario=request.user)
     total_pago = dados.filter(pago=True).aggregate(Sum('valor'))
-    total_geral = dados.aggregate(Sum('valor'))    
+    total_geral = dados.aggregate(Sum('valor'))
     contexto = {
         'dados': dados,
-        'total' : total_geral,
+        'total': total_geral,
     }
 
     return render(request, 'investimentos/pagina.html', contexto)
+
+
+def pagina_inicial(request):
+    pagina = 'investimentos/pagina_inicial.html'
+    dados = {
+        'dados': Investimento.objects.all()
+    }
+
+    return render(request, pagina)
 
 
 @login_required(login_url='/login/')
@@ -39,7 +48,7 @@ def some_view(request):
     print(total_geral)
     print(f"passou {dados}")
     print(f"total {total}")
-    contexto = {'dados': dados}     
+    contexto = {'dados': dados}
     return render(request, 'investimentos/pagina.html', contexto)
 
 
@@ -47,20 +56,21 @@ def detalhe(request, id):
 
     dados = Investimento.objects.get(pk=id)
     if dados.usuario != request.user:
-        return redirect ('novo_investimento_comum')
+        return redirect('novo_investimento_comum')
     dados = {
         'dados': dados
     }
-    
+
     return render(request, 'investimentos/detalhe.html', dados)
 
 
 def criar(request):
-    
+
     if request.method == 'POST':
         investimento_form = InvestimentoFrom(request.POST)
         if investimento_form.is_valid():
-            user = investimento_form.save(commit=False)  # salvando no banco de dados
+            # salvando no banco de dados
+            user = investimento_form.save(commit=False)
             user.usuario = request.user
             user.save()
         return redirect("pagina")  # redirecionando para pagina inicial
@@ -122,7 +132,6 @@ def submit_login(request):
 #     return render(request, 'investimentos/investimento_registrado.html', investimento)
 
 
-
 def teste01(request):
-    template_name='investimentos/teste.html'
+    template_name = 'investimentos/teste.html'
     return render(request, template_name)
