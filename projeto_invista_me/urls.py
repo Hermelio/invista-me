@@ -7,6 +7,7 @@ from invista_me import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('teste02', include('invista_me.urls', namespace='invista'),),
+    path('conta/', include('usuario.urls', namespace='usuario'),),
     # path('', views.pagina_inicial),
     path('novo_investimento/', views.criar, name='novo_investimento_comum'),
     path('novo_investimento/<int:id>', views.editar, name='editar'),
