@@ -1,13 +1,15 @@
 from django.http import request, response
 from django.shortcuts import render, redirect, HttpResponse
-from .models import Investimento
-from .forms import InvestimentoFrom
+from .models import Investimento, Questions
+from .forms import InvestimentoFrom, QuestionForm
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core import serializers
+
 from django.db.models import Sum
+from . import forms
+from . import models
 
 
 @login_required(login_url='/login/')
@@ -24,6 +26,7 @@ def pagina(request):
     return render(request, 'investimentos/pagina.html', contexto)
 
 
+@login_required(login_url='/login/')
 def pagina_inicial(request):
     pagina = 'investimentos/pagina_inicial.html'
     dados = {
@@ -31,6 +34,50 @@ def pagina_inicial(request):
     }
 
     return render(request, pagina)
+
+
+def contato(request):
+    if request.method == "POST":
+        form = forms.QuestionForm(request.POST)
+        if form.is_valid():
+            nome = form.cleaned_data['nome_contato']
+            email = form.cleaned_data['contact_email']
+            questao = form.cleaned_data['question']
+            salvando = Questions.objects.create(
+                nome_contato=nome, contact_email=email, question=questao)
+            salvando.save()
+        # Redirecionando para pagina inicial
+        return redirect('pagina_inicial')
+    else:
+        form = forms.QuestionForm()
+
+    return render(request, 'investimentos/contato.html', {"form": form})
+
+
+# def contato(request):
+#     if request.method == 'POST':
+#         contact_form = ContactForm(request.POST)
+#         if contact_form.is_valid():
+#             print(contact_form)
+#             salvando = contact_form.save(commit=False)
+#             salvando.save()
+    #     form_email = contact_form.cleaned_data['email']
+    #     print(form_email)
+    #     form_name = contact_form.cleaned_data['nome_completo']
+    #     print(form_name)
+    #     form_question = contact_form.cleaned_data['mensagem']
+    #     print(form_question)
+    #     print(contact_form.cleaned_data)
+    #     saving_all = Contato(
+    #         nome_contato=form_name, email_contato=form_email, campo_contato=form_question)
+    #     saving_all.save()
+    # else:
+    #     contact_form = forms.ContactForm()
+    #     return redirect("pagina_inicial")
+    # else:
+    #     print('Erro ao salvar dados')
+    # contexto = {'formulario': ContactForm()}
+    # return render(request, 'investimentos/contato.html', contexto)
 
 
 @login_required(login_url='/login/')
@@ -73,7 +120,7 @@ def criar(request):
             user = investimento_form.save(commit=False)
             user.usuario = request.user
             user.save()
-        return redirect("pagina")  # redirecionando para pagina inicial
+        return redirect('pagina_inicial')  # redirecionando para pagina inicial
     else:
         print('Erro ao salvar dados')
 
@@ -118,7 +165,7 @@ def submit_login(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect("menu")
+            return redirect("pagina_inicial")
         else:
             messages.error(
                 request, "Usuario e senha Invalido. Tente novamente")
